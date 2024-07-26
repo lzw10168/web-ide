@@ -1,0 +1,67 @@
+{
+  "name": "web-ide",
+  "private": false,
+  "version": "0.0.0",
+  "description": "一款实现在线编辑代码实时预览的工具",
+  "author": {
+    "name": "lk",
+    "email": "lzw10168@163.com"
+  },
+  "keywords": [
+    "react",
+    "react-dnd",
+    "web ide"
+  ],
+  "homepage": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lzw10168/web-ide.git"
+  },
+  "bugs": {
+    "url": "https://github.com/lzw10168/web-ide/issues"
+  },
+  "scripts": {
+    "start": "npm run server && npm run dev",
+    "server": "node server/index.js",
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/lang-less": "^6.0.2",
+    "@codemirror/view": "6",
+    "@uiw/codemirror-theme-github": "^4.23.0",
+    "@uiw/react-codemirror": "^4.23.0",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "file-saver": "^2.0.5",
+    "morgan": "^1.10.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hotkeys-hook": "^4.5.0",
+    "react-icons": "^5.2.1",
+    "react-split": "^2.0.14"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.3",
+    "@types/react-dom": "^18.3.0",
+    "@typescript-eslint/eslint-plugin": "^7.15.0",
+    "@typescript-eslint/parser": "^7.15.0",
+    "@vitejs/plugin-react": "^4.3.1",
+    "autoprefixer": "^10.4.19",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.7",
+    "less": "^4.2.0",
+    "path": "^0.12.7",
+    "postcss": "^8.4.40",
+    "tailwindcss": "^3.4.7",
+    "typescript": "^5.2.2",
+    "vite": "^5.3.4"
+  }
+}
