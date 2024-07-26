@@ -23,7 +23,7 @@ function App() {
         onChange={() => {}}
       />
       <CodeMirrorWrap
-        language="javascript"
+        language="js"
         initValue={INIT_JAVASCRIPT}
         onChange={() => {}}
       />
