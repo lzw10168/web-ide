@@ -19,7 +19,7 @@ function EditArea({ type, isUnSave, children, fileName }: EditAreaProps) {
   }
 
   return (
-    <div className="flex flex-col h-full w-full border border-zinc-700 rounded-md">
+    <div className="flex flex-col h-full w-full border border-zinc-700">
       <div className="flex items-center bg-black-500 text-white ">
         <div className="bg-neutral-950	flex p-2 items-center">
           {typeIcon[type]}

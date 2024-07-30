@@ -5,8 +5,8 @@ import { html } from "@codemirror/lang-html"
 import { less } from "@codemirror/lang-less"
 import { githubDark } from "@uiw/codemirror-theme-github"
 import { LanguageType } from "@/type"
-import EditArea from "@/UI/EditArea"
-export interface CodeMirrorWrapProps {
+import EditorLayout from "@/UI/EditorLayout"
+export interface CodeEditorProps {
   language: LanguageType
   initValue: string
   onChange: (val: string, viewUpdate: any) => void
@@ -18,7 +18,7 @@ const languageMap = {
   less: less(),
 }
 
-export function CodeMirrorWrap(props: CodeMirrorWrapProps) {
+export default function CodeEditor(props: CodeEditorProps) {
   const { language, onChange, initValue } = props
   const [value, setValue] = useState(initValue)
   const handleChange = useCallback((val: string, viewUpdate) => {
@@ -32,7 +32,7 @@ export function CodeMirrorWrap(props: CodeMirrorWrapProps) {
     }
   }
   return (
-    <EditArea type={language} fileName={language} isUnSave={false}>
+    <EditorLayout type={language} fileName={language} isUnSave={false}>
       <CodeMirror
         value={value}
         theme={githubDark}
@@ -41,6 +41,6 @@ export function CodeMirrorWrap(props: CodeMirrorWrapProps) {
         onChange={handleChange}
         onKeyDown={handleKeyDown}
       />
-    </EditArea>
+    </EditorLayout>
   )
 }

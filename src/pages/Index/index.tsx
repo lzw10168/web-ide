@@ -1,6 +1,6 @@
 import { INIT_HTML, INIT_JAVASCRIPT, INIT_LESS } from "./constant"
 import "./index.less"
-import { CodeMirrorWrap } from "@/components/CodeMirrorWrap"
+import CodeEditor from "@/components/CodeEditor"
 import PreviewResult from "@/components/PreviewResult"
 import HeaderLayout from "@/UI/HeaderLayout"
 import { useState } from "react"
@@ -15,21 +15,13 @@ function App() {
     <div className="h-full flex flex-col">
       <HeaderLayout viewMode={viewMode} onViewModeChange={handleViewMode} />
       <ResizableLayout previewResult={<PreviewResult />} viewMode={viewMode}>
-        <CodeMirrorWrap
-          language="html"
-          initValue={INIT_HTML}
-          onChange={() => {}}
-        />
-        <CodeMirrorWrap
+        <CodeEditor language="html" initValue={INIT_HTML} onChange={() => {}} />
+        <CodeEditor
           language="js"
           initValue={INIT_JAVASCRIPT}
           onChange={() => {}}
         />
-        <CodeMirrorWrap
-          language="less"
-          initValue={INIT_LESS}
-          onChange={() => {}}
-        />
+        <CodeEditor language="less" initValue={INIT_LESS} onChange={() => {}} />
       </ResizableLayout>
     </div>
   )
