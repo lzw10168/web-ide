@@ -7,22 +7,16 @@
   height: 100%;
 }
 
-.split {
-  display: flex;
-  flex-direction: row;
-  height: 100%;
-}
-
 .gutter {
   background-repeat: no-repeat;
   background-position: 50%;
 }
 
 .gutter.gutter-horizontal {
-
   cursor: col-resize;
+}
 
-  &:hover {
-    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==');
-  }
+.gutter.gutter-vertical {
+
+  cursor: row-resize !important;
 }
