@@ -1,61 +1,120 @@
+const express = require("express")
+const path = require("path")
+const morgan = require("morgan")
+const bodyParser = require("body-parser")
+const cors = require("cors")
+const dotenv = require("dotenv")
+const less = require("less")
+dotenv.config()
 
+const app = express()
 
-const express = require('express');
-const path = require('path');
-const morgan = require('morgan');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const dotenv = require('dotenv');
-dotenv.config(); 
+app.use(express.static(path.resolve(__dirname, "./static")))
 
-const app = express();
+app.use(morgan("dev"))
 
-// 静态文件服务
-app.use(express.static(path.resolve(__dirname, './static')));
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: true }))
+const whilelist = ["http://127.0.0.1:5173", "http://localhost:3001"]
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (whilelist.indexOf(origin) !== -1 || !origin) {
+        callback(null, "*")
+      } else {
+        callback(new Error("Not allowed by CORS"))
+      }
+    },
+    exposedHeaders: ["WWW-Authenticate", "Server-Authorization", "x-test-code"],
+    maxAge: 5,
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: [
+      "Content-Type",
+      "Authorization",
+      "Accept",
+      "x-requested-with",
+      "Content-Encoding",
+    ],
+  })
+)
 
-// 日志中间件
-app.use(morgan('dev'));
+let htmlStr = ""
+let cssStr = ""
+let jsStr = ""
+let completeHTML = ""
 
-// 解析JSON和urlencoded数据的中间件
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// 设置跨域
-app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || origin.includes('/server')) {
-      callback(null, '*'); // 允许来自所有域名请求
+app.post("/server/save/html", (req, res) => {
+  htmlStr = req.body.value
+  res.send({
+    status: 1,
+    message: "Save HTML successful",
+  })
+  tryGenerateCompleteHTML(res)
+})
+app.post("/server/save/less", (req, res) => {
+  const lessStr = req.body.value
+  // exchange less to css by less compiler
+  less.render(lessStr, (err, output) => {
+    if (err) {
+      res.send({
+        status: 0,
+        message: "Error compiling LESS",
+      })
     } else {
-      callback(new Error('Not allowed by CORS'));
+      cssStr = output.css
+      res.send({
+        status: 1,
+        message: "Save LESS successful",
+      })
+      tryGenerateCompleteHTML(res)
     }
-  },
-  exposedHeaders: ['WWW-Authenticate', 'Server-Authorization', 'x-test-code'],
-  maxAge: 5,
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'Accept',
-    'x-requested-with',
-    'Content-Encoding'
-  ]
-}));
+  })
+})
+app.post("/server/save/js", (req, res) => {
+  jsStr = req.body.value
+  res.send({
+    status: 1,
+    message: "Save JS successful",
+  })
+  tryGenerateCompleteHTML(res)
+})
 
-let htmlStr = "";
+app.post("/server/save/init", (req, res) => {
+  htmlStr = req.body.html
+  cssStr = req.body.less
+  jsStr = req.body.js
+  tryGenerateCompleteHTML()
+  res.send({
+    status: 1,
+    message: "Init successful",
+  })
+})
 
-app.post('/server/render', (req, res) => {
-  htmlStr = req.body;
-  res.send('success');
-});
+function tryGenerateCompleteHTML() {
+  completeHTML = `
+      <!DOCTYPE html>
+      <html lang="en">
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <style>${cssStr}</style>
+      </head>
+      <body>
+        ${htmlStr}
+        <script>${jsStr}</script>
+      </body>
+      </html>
+    `
+}
 
-app.get('/html*', (req, res) => {
-  res.type('html');
-  res.send(htmlStr);
-});
+app.get("/html*", (req, res) => {
+  res.type("html")
+  res.send(completeHTML)
+})
 
-const PORT = process.env.SERVER_PORT || 3000;
-console.log('process.env: ', process.env.SERVER_PORT);
+const PORT = process.env.SERVER_PORT
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+  console.log(`Server is running on port ${PORT}`)
+})

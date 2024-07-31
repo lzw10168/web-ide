@@ -1,5 +1,6 @@
 import UseViewMode from "@/hooks/UseViewMode"
 import { ViewMode } from "@/type"
+import { useEffect, useState } from "react"
 import Split from "react-split"
 
 interface ResizableLayoutProps {
@@ -37,12 +38,19 @@ function ResizableLayout({
   const { isHorizontal, isVertical, isBottom, isRight } = UseViewMode(viewMode)
 
   const sizes = isVertical ? [50, 50] : [50, 50]
+  const [updateKey, setUpdateKey] = useState(0)
 
+  useEffect(() => {
+    setUpdateKey((prev) => prev + 1)
+  }, [viewMode])
+
+  useEffect(() => {
+    setUpdateKey((prev) => prev + 1)
+  }, [viewMode])
   if (isVertical) {
     return (
       <Split
         {...defaultSplitProps}
-        key={viewMode}
         className="h-full"
         sizes={sizes}
         direction="vertical"
@@ -65,7 +73,6 @@ function ResizableLayout({
     return (
       <Split
         {...defaultSplitProps}
-        key={viewMode}
         className="h-full flex flex-row"
         sizes={sizes}
         direction="horizontal"

@@ -1,8 +1,17 @@
-function PreviewResult() {
+function PreviewResult(props) {
+  const { flag } = props
   return (
-    <div className="bg-slate-100">
-      <h1>PreviewResult</h1>
-    </div>
+    <iframe
+      title="preview"
+      src={`${import.meta.env.VITE_SERVER_URL}/html?flag=${flag}`}
+      style={{
+        width: "100%",
+        height: `100%`,
+        margin: 0,
+        padding: 0,
+        border: "none",
+      }}
+    ></iframe>
   )
 }
 

@@ -9,7 +9,8 @@ import EditorLayout from "@/UI/EditorLayout"
 export interface CodeEditorProps {
   language: LanguageType
   initValue: string
-  onChange: (val: string, viewUpdate: any) => void
+  onChange?: (val: string, viewUpdate: any) => void
+  onSave: (value: string) => void
 }
 
 const languageMap = {
@@ -19,20 +20,24 @@ const languageMap = {
 }
 
 export default function CodeEditor(props: CodeEditorProps) {
-  const { language, onChange, initValue } = props
+  const { language, onSave, onChange, initValue } = props
   const [value, setValue] = useState(initValue)
-  const handleChange = useCallback((val: string, viewUpdate) => {
-    onChange(val, viewUpdate)
+  const [isUnSave, setIsUnSave] = useState(false)
+  const handleChange = useCallback((val: string, viewUpdate: any) => {
+    setIsUnSave(true)
+    onChange?.(val, viewUpdate)
     setValue(val)
   }, [])
 
   const handleKeyDown = (event: KeyboardEvent) => {
     if ((event.ctrlKey || event.metaKey) && event.key === "s") {
       event.preventDefault()
+      setIsUnSave(false)
+      onSave(value)
     }
   }
   return (
-    <EditorLayout type={language} fileName={language} isUnSave={false}>
+    <EditorLayout type={language} fileName={language} isUnSave={isUnSave}>
       <CodeMirror
         value={value}
         theme={githubDark}
